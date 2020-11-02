@@ -3,11 +3,10 @@ const { Post, User, Comment } = require("../../models");
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
-// GET all posts
+// To GET all posts
 router.get("/", (req, res) => {
   console.log("======================");
   Post.findAll({
-    // Query configuration
     attributes: ["id", "title", "content", "created_at"],
     order: [["created_at", "DESC"]],
     include: [
@@ -32,7 +31,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// GET a single post
+// To GET a single post
 router.get("/:id", (req, res) => {
   Post.findOne({
     where: {
@@ -67,7 +66,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// POST api/posts -- creating a post
+// To POST (create a post) api/posts
 router.post("/", withAuth, (req, res) => {
   // create 1 post
   Post.create({
@@ -82,7 +81,7 @@ router.post("/", withAuth, (req, res) => {
     });
 });
 
-// update a post title
+// To PUT (update) post
 router.put("/:id", withAuth, (req, res) => {
   Post.update(
     {
@@ -108,16 +107,13 @@ router.put("/:id", withAuth, (req, res) => {
     });
 });
 
-// DELETE api/posts/id -- delete a post
+// To DELETE api/posts/id > @ id EX: '1'
 router.delete("/:id", withAuth, (req, res) => {
-  //adding in ability to delete post that has comments attached to 
-  //get around foreign key constraints
   Post.findOne({
     where: {id: req.params.id},
     include: [Comment]
   })
   .then(post => {
-    //we find comments, delete them and then delete post
     post.comments.forEach(comment => {
       comment.destroy();
     })

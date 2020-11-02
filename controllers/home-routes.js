@@ -22,9 +22,9 @@ router.get("/", (req, res) => {
     ],
   })
     .then((dbPostData) => {
-      //serialize the entire array of posts into readable format
+      // To serialize array
       const posts = dbPostData.map((post) => post.get({ plain: true }));
-      // pass a single post object into the homepage template
+      // To pass a single post to homepage
       res.render("homepage", { posts, loggedIn: req.session.loggedIn });
     })
     .catch((err) => {
@@ -34,20 +34,18 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
+  // To redirect users to the Homepage
   if (req.session.loggedIn) {
-    // redirecting users to homepage once they log in
     res.redirect("/");
     return;
   }
   res.render("login");
 });
 
-// render the signup page
 router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-//rendering one post to the single-post page
 router.get("/post/:id", (req, res) => {
   Post.findOne({
     where: {
@@ -75,10 +73,8 @@ router.get("/post/:id", (req, res) => {
         return;
       }
 
-      // serialize the data
       const post = dbPostData.get({ plain: true });
 
-      // pass data to template
       console.log(post);
       res.render("single-post", { post, loggedIn: req.session.loggedIn });
     })
@@ -116,10 +112,8 @@ router.get("/posts-comments", (req, res) => {
         return;
       }
 
-      // serialize the data
       const post = dbPostData.get({ plain: true });
 
-      // pass data to template
       res.render("posts-comments", { post, loggedIn: req.session.loggedIn });
     })
     .catch((err) => {

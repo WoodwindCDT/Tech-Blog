@@ -1,9 +1,8 @@
 const router = require("express").Router();
 const { User, Post, Comment } = require("../../models");
 
-// GET /api/users
+// To GET /api/users
 router.get("/", (req, res) => {
-  // access our user model and run .findAll() method -- similar to SELECT * FROM users;
   User.findAll({
     attributes: { exclude: ["password"] },
   })
@@ -14,7 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// GET /api/users/1
+// To GET /api/users/1
 router.get("/:id", (req, res) => {
   User.findOne({
     attributes: { exclude: ["password"] },
@@ -26,7 +25,6 @@ router.get("/:id", (req, res) => {
         model: Post,
         attributes: ["id", "title", "content", "created_at"],
       },
-      // include the Comment model here:
       {
         model: Comment,
         attributes: ["id", "comment_text", "created_at"],
@@ -54,14 +52,12 @@ router.get("/:id", (req, res) => {
     });
 });
 
-// POST /api/users - similar to INSERT INTO users / VALUES
+// To POST /api/users
 router.post("/", (req, res) => {
-  // expects {username: 'Cameron', password: 'test1'}
   User.create({
     username: req.body.username,
     password: req.body.password,
   })
-    // store user data during session
     .then((dbUserData) => {
       req.session.save(() => {
         req.session.user_id = dbUserData.id;
@@ -77,11 +73,10 @@ router.post("/", (req, res) => {
     });
 });
 
-// POST to identify users
+// To POST to identify users
 router.post("/login", (req, res) => {
   console.log("login route accessed")
   console.log(req.session)
-  // expects {username: 'Cameron', password: 'test1'}
   User.findOne({
     where: {
       username: req.body.username,
@@ -92,7 +87,6 @@ router.post("/login", (req, res) => {
         res.status(400).json({ message: "No user with that username!" });
         return;
       }
-      // verify user
       const validPassword = dbUserData.checkPassword(req.body.password);
 
       if (!validPassword) {
@@ -100,7 +94,6 @@ router.post("/login", (req, res) => {
         return;
       }
       req.session.save(() => {
-        // declare session variables
         req.session.user_id = dbUserData.id;
         req.session.username = dbUserData.username;
         req.session.loggedIn = true;
@@ -114,7 +107,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-// users to log out
+// For user to log out
 router.post("/logout", (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
@@ -125,7 +118,7 @@ router.post("/logout", (req, res) => {
   }
 });
 
-// PUT /api/users/1 
+// To PUT /api/users/id > EX: :id = '1'
 router.put("/:id", (req, res) => {
   User.update(req.body, {
     individualHooks: true,
@@ -146,7 +139,7 @@ router.put("/:id", (req, res) => {
     });
 });
 
-// DELETE /api/users/1
+// To DELETE /api/users/id > EX: :id = '1'
 router.delete("/:id", (req, res) => {
   User.destroy({
     where: {

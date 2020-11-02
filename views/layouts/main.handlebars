@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to The Tech Blog!</title>
+    <title>Tech Blog</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
     <div class="wrapper">
-        <header>
-            <h1>
-                <a href="/">Homepage :)</a>
-            </h1>
-            <nav>
-                {{#if loggedIn}}
-                  <a href="/dashboard">Your Dashboard</a>
-                  <button id="logout" class="btn-no-style logout">Logout Here</button>
-                {{else}}
-                  <a href="/login">Login Here</a>
-                {{/if}}
-            </nav>
-        </header>
-        <div class="site-row">
-            <div class="site-name">
-                <h1>The Tech Blog</h1>
+        <header class="hero">
+            
+            <h1 class="app-title"><i class="fab "></i>Tech Blog</h1>
+            <div>
+                <nav class"nav">
+                    <a class="link" href="/">Home</a>
+                    <a class="link" href="/dashboard">Dashboard</a>
+                    {{#if loggedIn}}
+                    <a class="link" href="/" id="logout">Logout Here</a>
+                    {{else}}
+                    <a class="link" href="/login">Login Here</a>
+                    {{/if}}
+                </nav>
             </div>
-        </div>
+        </header>
+
         <main>
             {{{ body }}}
         </main>
     </div>
+
     {{#if loggedIn}}
-      <script src="/javascript/logout.js"></script>
+        <script src="/javascript/logout.js"></script>
     {{/if}}
+
 </body>
 </html>
