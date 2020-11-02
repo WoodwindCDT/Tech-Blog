@@ -4,7 +4,6 @@ const withAuth = require("../../utils/auth");
 
 // To GET all api/commments
 router.get("/", (req, res) => {
-  // Access our User model and run .findAll() method
   Comment.findAll({})
     .then((dbCommentData) => res.json(dbCommentData))
     .catch((err) => {
@@ -29,12 +28,10 @@ router.get("/:id", (req, res) => {
 
 // To POST a comment api/comments
 router.post("/", withAuth, (req, res) => {
-  // check the session, IF statement to ensure only logged in users can comment
   if (req.session) {
     Comment.create({
       comment_text: req.body.comment_text,
       post_id: req.body.post_id,
-      // use the id from the session
       user_id: req.session.user_id,
     })
       .then((dbCommentData) => res.json(dbCommentData))
